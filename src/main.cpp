@@ -119,6 +119,8 @@ int rc_auto_loop_function_Controller1() {
 
   bool pressed = false;
   bool first_time = true;
+  bool driveStopping = false;
+  timer driveStopTimer;
   timer l1Timer;
   // process the controller input every 20 milliseconds
   // update the motors based on the input values
@@ -144,13 +146,31 @@ int rc_auto_loop_function_Controller1() {
       if (abs(right) < 5) right = 0;
 
       if (left == 0 && right == 0) {
-        LeftDriveSmart.stop(brake);
-        RightDriveSmart.stop(brake);
-      } else {
-        LeftDriveSmart.setVelocity(left, percent);
-        RightDriveSmart.setVelocity(right, percent);
-        LeftDriveSmart.spin(forward);
-        RightDriveSmart.spin(forward);
+
+          // first frame of stopping
+          if (!driveStopping) {
+              driveStopping = true;
+              driveStopTimer.reset();
+
+              LeftDriveSmart.stop(brake);
+              RightDriveSmart.stop(brake);
+          }
+
+          // after 0.5s → coast
+          else if (driveStopTimer.time(sec) > 0.5) {
+              LeftDriveSmart.stop(coast);
+              RightDriveSmart.stop(coast);
+          }
+
+      }
+      else {
+          // driver moved again → cancel stopping logic
+          driveStopping = false;
+
+          LeftDriveSmart.setVelocity(left, percent);
+          RightDriveSmart.setVelocity(right, percent);
+          LeftDriveSmart.spin(forward);
+          RightDriveSmart.spin(forward);
       }
 
       // ================= ARM SMART HOLD =================
