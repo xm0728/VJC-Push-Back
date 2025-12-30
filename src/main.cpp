@@ -229,7 +229,7 @@ int rc_auto_loop_function_Controller1() {
 
         if (!pressed) {
             // Normal auto-hold
-              Arm.stop(brake);
+              Arm.stop(coast);
               Controller1LeftShoulderControlMotorsStopped = true;
             
         }
