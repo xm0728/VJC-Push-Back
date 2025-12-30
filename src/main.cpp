@@ -39,7 +39,7 @@ motor Right4 = motor(PORT4, ratio6_1, false);
 motor Right5 = motor(PORT5, ratio6_1, false);
 motor_group RightDriveSmart = motor_group(Right3, Right4, Right5);
 inertial DrivetrainInertial = inertial(PORT6);
-smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 299.24, 320, 40, mm, 0.6666666666666666);
+drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 299.24, 320, 40, mm, 0.6666666666666666);
 
 motor Intake = motor(PORT9, ratio6_1, false);
 
